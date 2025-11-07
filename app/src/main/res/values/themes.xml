@@ -3,6 +3,8 @@
     <style name="Base.Theme.CampusExpenseManagerAppGroup3" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary"> @color/btec</item>
+        <item name="colorPrimaryVariant">@color/btec</item>
     </style>
 
     <style name="Theme.CampusExpenseManagerAppGroup3" parent="Base.Theme.CampusExpenseManagerAppGroup3" />
