@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
@@ -10,129 +11,130 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- HEADER -->
-
-        <!-- DESCRIPTION LABEL -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="35dp"
             android:fontFamily="sans-serif-black"
-            android:letterSpacing="0.01"
-            android:shadowColor="#80000000"
-            android:shadowDx="0"
-            android:shadowDy="3"
-            android:shadowRadius="6"
             android:text="Add New Expense"
-            android:textColor="@color/white"
-            android:textSize="32sp"
-            android:textStyle="bold" />
+            android:textColor="#FFFFFF"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Description"
-            android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textColor="#E0E0E0"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:letterSpacing="0.02"
-            android:layout_marginBottom="6dp"/>
+            android:layout_marginBottom="8dp"
+            tools:ignore="HardcodedText" />
 
-        <!-- DESCRIPTION FIELD -->
         <EditText
             android:id="@+id/edtDescription"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@drawable/btec_border"
-            android:hint="Enter expense description"
-            android:padding="16dp"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textColorHint="#FFFFFFFF" />
+            android:hint="Mua sách lập trình Android"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textColorHint="#99FFFFFF"
+            android:inputType="textCapSentences"
+            tools:ignore="HardcodedText" />
 
-        <!-- AMOUNT LABEL -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Amount"
-            android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textColor="#E0E0E0"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:letterSpacing="0.02"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="6dp"/>
+            android:layout_marginBottom="8dp"
+            tools:ignore="HardcodedText" />
 
-        <!-- AMOUNT FIELD -->
         <EditText
             android:id="@+id/edtAmount"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@drawable/btec_border"
-            android:hint="Enter amount"
+            android:hint="150000"
             android:inputType="numberDecimal"
-            android:padding="16dp"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            android:textColorHint="#FFFFFFFF" />
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#99FFFFFF"
+            tools:ignore="HardcodedText" />
 
-        <!-- CATEGORY LABEL -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Category"
-            android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textColor="#E0E0E0"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:letterSpacing="0.02"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="6dp"/>
+            android:layout_marginBottom="8dp"
+            tools:ignore="HardcodedText" />
 
-        <!-- CATEGORY SPINNER -->
         <Spinner
             android:id="@+id/spinnerCategory"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@drawable/btec_border"
-            android:padding="12dp"/>
+            android:paddingStart="18dp"
+            android:paddingEnd="12dp"
+            android:spinnerMode="dropdown"
+            android:gravity="center_vertical" />
 
-        <!-- DATE LABEL -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date"
-            android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textColor="#E0E0E0"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:letterSpacing="0.02"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="6dp"/>
+            android:layout_marginBottom="8dp"
+            tools:ignore="HardcodedText" />
 
-        <!-- DATE FIELD -->
         <EditText
             android:id="@+id/edtDate"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@drawable/btec_border"
-            android:hint="YYYY-MM-DD"
-            android:padding="16dp"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            android:textColorHint="#FFFFFFFF"
-            android:focusable="false" />
+            android:hint="Chọn ngày: YYYY-MM-DD"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#99FFFFFF"
+            android:focusable="false"
+            android:clickable="true"
+            tools:ignore="HardcodedText" />
 
-        <!-- SAVE BUTTON -->
         <Button
             android:id="@+id/btnSaveExpense"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginTop="30dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="40dp"
             android:backgroundTint="#00E676"
             android:text="Save Expense"
             android:textSize="20sp"
             android:textStyle="bold"
             android:letterSpacing="0.02"
-            android:textColor="@color/white"
-            android:fontFamily="sans-serif-medium" />
+            android:textColor="@color/black"
+            android:fontFamily="sans-serif-medium"
+            tools:ignore="HardcodedText" />
 
     </LinearLayout>
 

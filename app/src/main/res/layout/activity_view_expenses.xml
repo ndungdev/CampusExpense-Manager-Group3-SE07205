@@ -1,24 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
-    android:background="@drawable/signin_bg">
+    android:background="@color/black"
+    android:padding="24dp"
+    tools:context=".ViewExpensesActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your Expenses"
-        android:textSize="30sp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
+        android:layout_marginBottom="25dp"
         android:fontFamily="sans-serif-black"
-        android:layout_marginBottom="20dp"/>
+        android:text="Your Expenses"
+        android:textColor="#FFFFFF"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        tools:ignore="HardcodedText" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerExpenses"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:paddingTop="8dp"
+        android:scrollbars="vertical" />
+
+    <TextView
+        android:id="@+id/textViewNoExpenses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:text="No expenses recorded yet."
+        android:textColor="#B0B0B0"
+        android:textSize="18sp"
+        android:visibility="gone"
+        tools:ignore="HardcodedText" />
 
 </LinearLayout>
