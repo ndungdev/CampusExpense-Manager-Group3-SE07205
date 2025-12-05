@@ -1,40 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    android:padding="24dp">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="35dp"
-            android:fontFamily="sans-serif-black"
-            android:text="Add New Expense"
-            android:textColor="#FFFFFF"
-            android:textSize="36sp"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText" />
+        android:layout_height="wrap_content"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Description"
-            android:textColor="#E0E0E0"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.02"
-            android:layout_marginBottom="8dp"
-            tools:ignore="HardcodedText" />
-
-        <EditText
-            android:id="@+id/edtDescription"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@drawable/btec_border"
@@ -50,21 +25,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Amount"
-            android:textColor="#E0E0E0"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.02"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="8dp"
-            tools:ignore="HardcodedText" />
-
-        <EditText
-            android:id="@+id/edtAmount"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/btec_border"
-            android:hint="150000"
             android:inputType="numberDecimal"
             android:paddingStart="18dp"
             android:paddingEnd="18dp"
@@ -73,42 +33,12 @@
             android:textColorHint="#99FFFFFF"
             tools:ignore="HardcodedText" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Category"
-            android:textColor="#E0E0E0"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.02"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="8dp"
-            tools:ignore="HardcodedText" />
+    <Spinner
+        android:id="@+id/spinnerCategory"
 
-        <Spinner
-            android:id="@+id/spinnerCategory"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/btec_border"
-            android:paddingStart="18dp"
-            android:paddingEnd="12dp"
-            android:spinnerMode="dropdown"
-            android:gravity="center_vertical" />
+    <TextView
+        android:layout_height="wrap_content"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date"
-            android:textColor="#E0E0E0"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.02"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="8dp"
-            tools:ignore="HardcodedText" />
-
-        <EditText
-            android:id="@+id/edtDate"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@drawable/btec_border"
@@ -138,4 +68,4 @@
 
     </LinearLayout>
 
-</ScrollView>
+    <Button

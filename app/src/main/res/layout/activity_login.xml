@@ -34,7 +34,7 @@
                     android:drawableLeft="@drawable/baseline_email_24"
                     android:drawablePadding="8dp"
                     android:hint="Email"
-                    android:padding="8dp"/>
+                    android:padding="8dp" />
 
                 <EditText
                     android:id="@+id/login_password"
