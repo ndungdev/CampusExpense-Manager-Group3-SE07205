@@ -41,7 +41,7 @@
             android:hint="Mua sách lập trình Android"
             android:paddingStart="18dp"
             android:paddingEnd="18dp"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black"
             android:textSize="18sp"
             android:textColorHint="#99FFFFFF"
             android:inputType="textCapSentences"
@@ -69,7 +69,7 @@
             android:paddingStart="18dp"
             android:paddingEnd="18dp"
             android:textSize="18sp"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black"
             android:textColorHint="#99FFFFFF"
             tools:ignore="HardcodedText" />
 
@@ -116,7 +116,7 @@
             android:paddingStart="18dp"
             android:paddingEnd="18dp"
             android:textSize="18sp"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black"
             android:textColorHint="#99FFFFFF"
             android:focusable="false"
             android:clickable="true"
