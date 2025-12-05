@@ -2,6 +2,7 @@ package com.example.campusexpensemanagerappgroup3;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
+import android.content.Intent; // Cần import Intent
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,8 +19,11 @@ public class AddExpenseActivity extends AppCompatActivity {
     Spinner spinnerCategory;
     Button btnSave;
 
-    // 1. KHAI BÁO DatabaseHelper
     DatabaseHelper db;
+
+    // Khai báo biến trạng thái Edit Mode và ID
+    private boolean isEditMode = false;
+    private int expenseId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +37,9 @@ public class AddExpenseActivity extends AppCompatActivity {
         spinnerCategory = findViewById(R.id.spinnerCategory);
         btnSave = findViewById(R.id.btnSaveExpense);
 
-        // 2. KHỞI TẠO DatabaseHelper THẬT
         db = new DatabaseHelper(this);
 
-        // --------------------- CATEGORY SPINNER (Fixed Color) -------------------
+        // --------------------- CATEGORY SPINNER -------------------
         String[] categories = {"Food", "Transport", "Rent", "Shopping", "Bills", "Other"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
@@ -49,11 +52,41 @@ public class AddExpenseActivity extends AppCompatActivity {
         // --------------------- DATE PICKER LOGIC -------------------------
         edtDate.setOnClickListener(v -> showDatePicker());
 
-        // --------------------- SAVE BUTTON -------------------------
+        // =================================================================
+        // LOGIC XỬ LÝ CHẾ ĐỘ CHỈNH SỬA (EDIT MODE)
+        // =================================================================
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra("IS_EDIT_MODE", false)) {
+            isEditMode = true;
+            expenseId = intent.getIntExtra("EXPENSE_ID", -1);
+
+            // 1. Điền dữ liệu cũ vào các trường
+            edtDescription.setText(intent.getStringExtra("DESCRIPTION"));
+            edtAmount.setText(String.format(Locale.US, "%.2f", intent.getDoubleExtra("AMOUNT", 0.0)));
+            edtDate.setText(intent.getStringExtra("DATE"));
+
+            // 2. Cập nhật Tiêu đề và Nút Save
+            setTitle("Edit Expense");
+            btnSave.setText("Update Expense");
+
+            // 3. Đặt Spinner đến Category hiện tại
+            String category = intent.getStringExtra("CATEGORY");
+            for (int i = 0; i < categories.length; i++) {
+                if (categories[i].equals(category)) {
+                    spinnerCategory.setSelection(i);
+                    break;
+                }
+            }
+        } else {
+            setTitle("Add New Expense");
+            btnSave.setText("Save Expense");
+        }
+
+        // --------------------- SAVE/UPDATE BUTTON -------------------------
         btnSave.setOnClickListener(v -> handleSaveExpense());
     }
 
-    // Phương thức xử lý sự kiện lưu
+    // Phương thức xử lý sự kiện lưu (SAVE) hoặc cập nhật (UPDATE)
     private void handleSaveExpense() {
         String description = edtDescription.getText().toString().trim();
         String amountStr = edtAmount.getText().toString().trim();
@@ -75,22 +108,31 @@ public class AddExpenseActivity extends AppCompatActivity {
             return;
         }
 
-        // 3. Thực hiện chèn vào Database THẬT
-        long result = db.insertExpense(description, amount, category, date);
-
-        // Đã XOÁ dòng giả lập: long result = 1;
-
-        if (result > 0) { // Nếu chèn thành công (ID > 0)
-            Toast.makeText(this, "Expense Added!", Toast.LENGTH_SHORT).show();
-            finish(); // Quan trọng: Đóng Activity này để gọi onResume() của ViewExpensesActivity
+        // 3. XỬ LÝ LƯU HOẶC CẬP NHẬT DỰA TRÊN isEditMode
+        if (isEditMode) {
+            // CHẾ ĐỘ CHỈNH SỬA (UPDATE)
+            int updatedRows = db.updateExpense(expenseId, description, amount, category, date);
+            if (updatedRows > 0) {
+                Toast.makeText(this, "Expense Updated!", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Toast.makeText(this, "Failed to update expense.", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            // Bao gồm trường hợp result == -1 (thường là lỗi chèn)
-            Toast.makeText(this, "Failed to add expense. Check database.", Toast.LENGTH_SHORT).show();
+            // CHẾ ĐỘ THÊM MỚI (INSERT)
+            long result = db.insertExpense(description, amount, category, date);
+
+            if (result > 0) {
+                Toast.makeText(this, "Expense Added!", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Toast.makeText(this, "Failed to add expense. Check database.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
 
-    // Phương thức hiển thị Date Picker
+    // Phương thức hiển thị Date Picker (Không đổi)
     private void showDatePicker() {
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);

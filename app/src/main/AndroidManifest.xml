@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CampusExpenseManagerAppGroup3">
         <activity
+            android:name=".ReportsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BudgetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SummaryActivity"
+            android:exported="false" />
+        <activity
             android:name=".ViewExpensesActivity"
             android:exported="false" />
         <activity
