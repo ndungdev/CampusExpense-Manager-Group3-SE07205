@@ -11,8 +11,27 @@
         android:layout_height="wrap_content"
 
             android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/btec_border"
+            android:hint="Mua sách lập trình Android"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textColorHint="#99FFFFFF"
+            android:inputType="textCapSentences"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textColorHint="#99FFFFFF"
+            tools:ignore="HardcodedText" />
 
     <Spinner
         android:id="@+id/spinnerCategory"
@@ -21,5 +40,32 @@
         android:layout_height="wrap_content"
 
             android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/btec_border"
+            android:hint="Chọn ngày: YYYY-MM-DD"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textColorHint="#99FFFFFF"
+            android:focusable="false"
+            android:clickable="true"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/btnSaveExpense"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginTop="40dp"
+            android:backgroundTint="#00E676"
+            android:text="Save Expense"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.02"
+            android:textColor="@color/black"
+            android:fontFamily="sans-serif-medium"
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
 
     <Button
