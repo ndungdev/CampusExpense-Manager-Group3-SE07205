@@ -1,151 +1,154 @@
 package com.example.campusexpensemanagerappgroup3;
 
-
-
+import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
+import android.content.Intent; // Cần import Intent
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class AddExpenseActivity extends AppCompatActivity {
 
-    private EditText editTextAmount;
-    private EditText editTextDescription;
-    private Spinner spinnerCategory;
-    private TextView textViewDate;
-    private Button buttonSaveExpense;
+    EditText edtDescription, edtAmount, edtDate;
+    Spinner spinnerCategory;
+    Button btnSave;
 
-    private Calendar selectedDate; // Biến để lưu trữ ngày được chọn
+    DatabaseHelper db;
+
+    // Khai báo biến trạng thái Edit Mode và ID
+    private boolean isEditMode = false;
+    private int expenseId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
 
-        // 1. Ánh xạ View
-        editTextAmount = findViewById(R.id.editTextAmount);
-        editTextDescription = findViewById(R.id.editTextDescription);
+        // Ánh xạ View
+        edtDescription = findViewById(R.id.edtDescription);
+        edtAmount = findViewById(R.id.edtAmount);
+        edtDate = findViewById(R.id.edtDate);
         spinnerCategory = findViewById(R.id.spinnerCategory);
-        textViewDate = findViewById(R.id.textViewDate);
-        buttonSaveExpense = findViewById(R.id.buttonSaveExpense);
+        btnSave = findViewById(R.id.btnSaveExpense);
 
-        // Khởi tạo ngày mặc định là hôm nay
-        selectedDate = Calendar.getInstance();
-        updateDateDisplay();
+        db = new DatabaseHelper(this);
 
-        // 2. Thiết lập Spinner (Danh mục)
-        setupCategorySpinner();
-
-        // 3. Thiết lập Listener cho chọn ngày
-        textViewDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog();
-            }
-        });
-
-        // 4. Thiết lập Listener cho nút Lưu
-        buttonSaveExpense.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveExpense();
-            }
-        });
-    }
-
-    // --- Hàm xử lý DatePicker ---
-
-    private void showDatePickerDialog() {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                selectedDate.set(Calendar.YEAR, year);
-                selectedDate.set(Calendar.MONTH, monthOfYear);
-                selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateDateDisplay();
-            }
-        };
-
-        new DatePickerDialog(this,
-                dateSetListener,
-                selectedDate.get(Calendar.YEAR),
-                selectedDate.get(Calendar.MONTH),
-                selectedDate.get(Calendar.DAY_OF_MONTH))
-                .show();
-    }
-
-    private void updateDateDisplay() {
-        // Định dạng ngày hiển thị (ví dụ: dd/MM/yyyy)
-        String dateFormat = "dd/MM/yyyy";
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.getDefault());
-        textViewDate.setText("Ngày: " + sdf.format(selectedDate.getTime()));
-    }
-
-    // --- Hàm xử lý Spinner ---
-
-    private void setupCategorySpinner() {
-        // Đây là danh sách các danh mục mẫu.
-        // Trong dự án thực tế, bạn nên lấy danh sách này từ database.
-        String[] categories = {"Ăn uống", "Đi lại", "Hóa đơn", "Giải trí", "Khác"};
-
+        // --------------------- CATEGORY SPINNER -------------------
+        String[] categories = {"Food", "Transport", "Rent", "Shopping", "Bills", "Other"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
-                android.R.layout.simple_spinner_dropdown_item,
+                android.R.layout.simple_spinner_item,
                 categories);
 
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapter);
+
+        // --------------------- DATE PICKER LOGIC -------------------------
+        edtDate.setOnClickListener(v -> showDatePicker());
+
+        // =================================================================
+        // LOGIC XỬ LÝ CHẾ ĐỘ CHỈNH SỬA (EDIT MODE)
+        // =================================================================
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra("IS_EDIT_MODE", false)) {
+            isEditMode = true;
+            expenseId = intent.getIntExtra("EXPENSE_ID", -1);
+
+            // 1. Điền dữ liệu cũ vào các trường
+            edtDescription.setText(intent.getStringExtra("DESCRIPTION"));
+            edtAmount.setText(String.format(Locale.US, "%.2f", intent.getDoubleExtra("AMOUNT", 0.0)));
+            edtDate.setText(intent.getStringExtra("DATE"));
+
+            // 2. Cập nhật Tiêu đề và Nút Save
+            setTitle("Edit Expense");
+            btnSave.setText("Update Expense");
+
+            // 3. Đặt Spinner đến Category hiện tại
+            String category = intent.getStringExtra("CATEGORY");
+            for (int i = 0; i < categories.length; i++) {
+                if (categories[i].equals(category)) {
+                    spinnerCategory.setSelection(i);
+                    break;
+                }
+            }
+        } else {
+            setTitle("Add New Expense");
+            btnSave.setText("Save Expense");
+        }
+
+        // --------------------- SAVE/UPDATE BUTTON -------------------------
+        btnSave.setOnClickListener(v -> handleSaveExpense());
     }
 
-    // --- Hàm xử lý Lưu Chi Tiêu ---
-
-    private void saveExpense() {
-        String amountStr = editTextAmount.getText().toString().trim();
-        String description = editTextDescription.getText().toString().trim();
+    // Phương thức xử lý sự kiện lưu (SAVE) hoặc cập nhật (UPDATE)
+    private void handleSaveExpense() {
+        String description = edtDescription.getText().toString().trim();
+        String amountStr = edtAmount.getText().toString().trim();
+        String date = edtDate.getText().toString().trim();
         String category = spinnerCategory.getSelectedItem().toString();
-        Date date = selectedDate.getTime();
+        double amount;
 
-        // 1. Kiểm tra dữ liệu đầu vào
-        if (amountStr.isEmpty()) {
-            editTextAmount.setError("Vui lòng nhập số tiền!");
+        // 1. Kiểm tra trường bắt buộc
+        if (description.isEmpty() || amountStr.isEmpty() || date.isEmpty()) {
+            Toast.makeText(this, "All fields are mandatory", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        double amount;
+        // 2. Xử lý lỗi chuyển đổi Amount
         try {
             amount = Double.parseDouble(amountStr);
         } catch (NumberFormatException e) {
-            editTextAmount.setError("Số tiền không hợp lệ!");
+            Toast.makeText(this, "Invalid amount format.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // 2. Thu thập dữ liệu chi tiêu (để lưu vào database)
-        // Hiện tại chỉ log và hiển thị Toast
+        // 3. XỬ LÝ LƯU HOẶC CẬP NHẬT DỰA TRÊN isEditMode
+        if (isEditMode) {
+            // CHẾ ĐỘ CHỈNH SỬA (UPDATE)
+            int updatedRows = db.updateExpense(expenseId, description, amount, category, date);
+            if (updatedRows > 0) {
+                Toast.makeText(this, "Expense Updated!", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Toast.makeText(this, "Failed to update expense.", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            // CHẾ ĐỘ THÊM MỚI (INSERT)
+            long result = db.insertExpense(description, amount, category, date);
 
-        // In ra console để kiểm tra
-        System.out.println("Expense Data:");
-        System.out.println("Amount: " + amount);
-        System.out.println("Category: " + category);
-        System.out.println("Description: " + description);
-        System.out.println("Date: " + date.toString());
+            if (result > 0) {
+                Toast.makeText(this, "Expense Added!", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Toast.makeText(this, "Failed to add expense. Check database.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
-        // 3. **Thực hiện lưu vào Database tại đây** // (Sử dụng Room hoặc SQLite Helper của bạn)
 
-        // 4. Thông báo và kết thúc Activity
-        Toast.makeText(this, "Đã lưu chi tiêu: " + category + " - " + amountStr + " VND", Toast.LENGTH_LONG).show();
+    // Phương thức hiển thị Date Picker (Không đổi)
+    private void showDatePicker() {
+        final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
 
-        // Sau khi lưu thành công, bạn có thể đóng Activity này và quay về MainActivity
-        // Cần thêm setResult(RESULT_OK) nếu muốn gửi thông báo cập nhật cho MainActivity
-        finish();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    // Định dạng ngày: YYYY-MM-DD
+                    String dateString = String.format(Locale.US, "%d-%02d-%02d",
+                            selectedYear, selectedMonth + 1, selectedDay);
+                    edtDate.setText(dateString);
+                },
+                year, month, day);
+
+        datePickerDialog.show();
     }
 }

@@ -1,124 +1,119 @@
 package com.example.campusexpensemanagerappgroup3;
 
-
-
-
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView; // QUAN TRỌNG: Phải import CardView
-import androidx.core.content.ContextCompat;
-
+import android.widget.ProgressBar;
+import java.text.NumberFormat;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Khai báo View: CardView thay vì Button
-    private TextView totalSpentTextView;
-    private TextView remainingTextView;
-    private ProgressBar budgetProgressBar; // Thêm ProgressBar
+    // Khai báo Ngân sách Cố định (Giống BudgetActivity)
+    private static final double MONTHLY_BUDGET = 5000000.0; // 5,000,000 VND
 
-    private CardView cardAddExpense;
-    private CardView cardViewExpenses;
-    private CardView cardBudget;
-    private CardView cardReports;
+    // Menu Cards
+    CardView cardAddExpense, cardViewExpenses, cardBudget, cardReports;
+    TextView welcomeText;
+
+    // Elements cho Stats Card (Từ activity_main.xml đã cập nhật)
+    private TextView totalSpentText;        // ID: totalSpentText
+    private TextView budgetRemainingText;   // ID: budgetRemainingText
+    private ProgressBar budgetProgressBar;  // ID: budgetProgressBar
+
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main); // Phải là dòng đầu tiên
+        setContentView(R.layout.activity_main);
 
-        // 1. Ánh xạ View (SỬA LỖI KHÔNG KHỚP ID)
-        totalSpentTextView = findViewById(R.id.totalSpentText);
-        remainingTextView = findViewById(R.id.budgetRemainingText);
-        budgetProgressBar = findViewById(R.id.budgetProgressBar); // Ánh xạ ProgressBar
-
+        // --- 1. Ánh xạ Menu Cards ---
         cardAddExpense = findViewById(R.id.cardAddExpense);
         cardViewExpenses = findViewById(R.id.cardViewExpenses);
         cardBudget = findViewById(R.id.cardBudget);
         cardReports = findViewById(R.id.cardReports);
+        welcomeText = findViewById(R.id.welcomeText);
 
-        // 2. Thiết lập Listener cho các CardView
-        setupCardListeners();
+        // --- 2. Ánh xạ Stats Card (Dữ liệu mới) ---
+        totalSpentText = findViewById(R.id.totalSpentText);
+        budgetRemainingText = findViewById(R.id.budgetRemainingText);
+        budgetProgressBar = findViewById(R.id.budgetProgressBar);
 
-        // 3. Tải và hiển thị dữ liệu chi tiêu
-        loadExpenseData();
+        // --- 3. Khởi tạo Database ---
+        db = new DatabaseHelper(this);
+
+        // Lấy Email và hiển thị lời chào
+        String email = getSharedPreferences("session", MODE_PRIVATE)
+                .getString("email", "User");
+        welcomeText.setText("Welcome, " + email + "!");
+
+        // --- 4. Thiết lập Listeners ---
+        // OPEN ADD EXPENSE
+        cardAddExpense.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, AddExpenseActivity.class)));
+
+        // OPEN VIEW EXPENSES
+        cardViewExpenses.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, ViewExpensesActivity.class)));
+
+        // OPEN BUDGET ACTIVITY
+        cardBudget.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, BudgetActivity.class)));
+
+        cardReports.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, ReportsActivity.class))); // Sửa ReportActivity -> SummaryActivity
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadExpenseData();
+        // Cập nhật tóm tắt ngân sách mỗi khi Activity trở lại foreground
+        updateBudgetSummary();
     }
 
-    // --- Các hàm xử lý sự kiện và logic ---
+    /**
+     * Lấy dữ liệu chi tiêu trong tháng, tính toán ngân sách và cập nhật UI.
+     */
+    private void updateBudgetSummary() {
+        // 1. Lấy Total Spent từ Database cho tháng hiện tại
+        double totalSpent = db.calculateTotalSpentForMonth();
 
-    private void setupCardListeners() {
-        // Xử lý nút "Add Expense"
-        cardAddExpense.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddExpenseActivity.class);
-                startActivity(intent);
-            }
-        });
+        // 2. Tính toán Remaining Budget
+        double remainingBudget = MONTHLY_BUDGET - totalSpent;
 
-        // Xử lý nút "View Expenses"
-        cardViewExpenses.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ViewExpensesActivity.class);
-                startActivity(intent);
-            }
-        });
+        // 3. Tính tỷ lệ Progress
+        double spendingRatio = totalSpent / MONTHLY_BUDGET;
+        int progressPercent = (int) (spendingRatio * 100);
 
-        // Xử lý nút "Manage Budget"
-        cardBudget.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ManageBudgetActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // Xử lý nút "Reports"
-        cardReports.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ReportsActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void loadExpenseData() {
-        // *** LOGIC TẢI DỮ LIỆU TỪ DB SẼ Ở ĐÂY ***
-
-        // Dữ liệu giả lập
-        double totalSpent = 1500.50;
-        double totalBudget = 2000.00; // Cần có tổng ngân sách để tính Remaining và Progress
-        double remainingBudget = totalBudget - totalSpent;
-
-        // Tính Progress Bar (theo %)
-        int progress = (int) ((totalSpent / totalBudget) * 100);
-
-        // Cập nhật giao diện
-        totalSpentTextView.setText(String.format(Locale.US, "$%.2f", totalSpent));
-        remainingTextView.setText(String.format(Locale.US, "$%.2f", remainingBudget));
-        budgetProgressBar.setProgress(progress);
-
-        // Tùy chỉnh màu sắc (Đảm bảo R.color.red và R.color.green đã được định nghĩa)
-        if (remainingBudget < 200.00) {
-            remainingTextView.setTextColor(ContextCompat.getColor(this, R.color.red));
-            // Đổi màu progress bar nếu gần hết ngân sách (tùy chọn)
-            budgetProgressBar.setProgressTintList(ContextCompat.getColorStateList(this, R.color.red));
-        } else {
-            remainingTextView.setTextColor(ContextCompat.getColor(this, R.color.green));
-            budgetProgressBar.setProgressTintList(ContextCompat.getColorStateList(this, R.color.green));
+        // Đảm bảo progress không vượt quá 100%
+        if (progressPercent > 100) {
+            progressPercent = 100;
         }
+
+        // 4. Định dạng tiền tệ
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+
+        // 5. Cập nhật UI
+
+        // Cập nhật Total Spent
+        totalSpentText.setText(formatter.format(totalSpent));
+
+        // Cập nhật Remaining Budget
+        budgetRemainingText.setText(formatter.format(remainingBudget));
+
+        // Thay đổi màu Remaining Budget nếu chi tiêu vượt quá
+        if (remainingBudget < 0) {
+            budgetRemainingText.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+            budgetProgressBar.setProgressTintList(getResources().getColorStateList(android.R.color.holo_red_light)); // Đổi màu thanh progress thành đỏ
+        } else {
+            budgetRemainingText.setTextColor(getResources().getColor(android.R.color.holo_green_light));
+            budgetProgressBar.setProgressTintList(getResources().getColorStateList(android.R.color.holo_green_light)); // Đổi màu thanh progress thành xanh
+        }
+
+        // Cập nhật Progress Bar
+        budgetProgressBar.setProgress(progressPercent);
     }
 }

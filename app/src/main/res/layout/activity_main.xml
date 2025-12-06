@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#F0F0F0"
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,6 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
+        <!-- Header Section -->
         <LinearLayout
             android:id="@+id/headerSection"
             android:layout_width="match_parent"
@@ -28,12 +28,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Welcome Back! 👋"
-                android:textColor="#333333"
+                android:textColor="#FFFFFF"
                 android:textSize="36sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-black"
                 android:letterSpacing="-0.02"
-                android:shadowColor="#CCCCCC"
+                android:shadowColor="#764ba2"
                 android:shadowDx="0"
                 android:shadowDy="4"
                 android:shadowRadius="10"
@@ -51,12 +51,13 @@
                 android:fontFamily="sans-serif-light"
                 android:letterSpacing="0.02"
                 android:alpha="0.92"
-                android:shadowColor="#CCCCCC"
+                android:shadowColor="#764ba280"
                 android:shadowDx="0"
                 android:shadowDy="2"
                 android:shadowRadius="6"/>
         </LinearLayout>
 
+        <!-- Quick Stats Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/statsCard"
             android:layout_width="match_parent"
@@ -90,6 +91,7 @@
                     android:layout_marginTop="12dp"
                     android:weightSum="2">
 
+                    <!-- Total Expenses -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -115,6 +117,7 @@
 
                     </LinearLayout>
 
+                    <!-- Budget Remaining -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -143,6 +146,7 @@
 
                 </LinearLayout>
 
+                <!-- Progress Bar -->
                 <ProgressBar
                     android:id="@+id/budgetProgressBar"
                     style="?android:attr/progressBarStyleHorizontal"
@@ -158,6 +162,7 @@
 
         </androidx.cardview.widget.CardView>
 
+        <!-- Menu Grid -->
         <GridLayout
             android:id="@+id/menuGrid"
             android:layout_width="match_parent"
@@ -169,6 +174,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
+            <!-- CARD 1: Add Expense -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardAddExpense"
                 android:layout_width="0dp"
@@ -206,6 +212,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- CARD 2: View Expenses -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewExpenses"
                 android:layout_width="0dp"
@@ -243,6 +250,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- CARD 3: Budget -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardBudget"
                 android:layout_width="0dp"
@@ -280,6 +288,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- CARD 4: Reports -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardReports"
                 android:layout_width="0dp"

@@ -15,16 +15,16 @@
             android:name=".ReportsActivity"
             android:exported="false" />
         <activity
-            android:name=".ManageBudgetActivity"
+            android:name=".BudgetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SummaryActivity"
             android:exported="false" />
         <activity
             android:name=".ViewExpensesActivity"
             android:exported="false" />
         <activity
             android:name=".AddExpenseActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddExpense"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
