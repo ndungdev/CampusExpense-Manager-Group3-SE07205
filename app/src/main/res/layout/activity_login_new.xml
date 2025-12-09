@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_orange_background"
+    android:background="@drawable/gradient_background"
     android:orientation="vertical"
-    tools:context=".SignupActivity">
+    tools:context=".LoginActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,20 +26,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="30dp">
+                android:layout_marginTop="60dp"
+                android:layout_marginBottom="40dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="📝"
-                    android:textSize="70sp"
+                    android:text="💰"
+                    android:textSize="80sp"
                     android:layout_marginBottom="16dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Create Account"
+                    android:text="Campus Expense"
                     android:textColor="@color/white"
                     android:textSize="32sp"
                     android:textStyle="bold"
@@ -48,15 +48,25 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Start managing your expenses today"
+                    android:text="Manager"
                     android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:layout_marginTop="8dp"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
                     android:alpha="0.9"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome Back!"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_marginTop="8dp"
+                    android:alpha="0.8"/>
 
             </LinearLayout>
 
-            <!-- Signup Form Card -->
+            <!-- Login Form Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,7 +84,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sign Up"
+                        android:text="Sign In"
                         android:textColor="@color/text_primary"
                         android:textSize="28sp"
                         android:textStyle="bold"
@@ -83,14 +93,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Create your account"
+                        android:text="Please login to continue"
                         android:textColor="@color/text_secondary"
                         android:textSize="14sp"
                         android:layout_marginBottom="24dp"/>
 
                     <!-- Email Input -->
                     <EditText
-                        android:id="@+id/signup_email"
+                        android:id="@+id/login_email"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_marginTop="8dp"
@@ -107,7 +117,7 @@
 
                     <!-- Password Input -->
                     <EditText
-                        android:id="@+id/signup_password"
+                        android:id="@+id/login_password"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_marginTop="16dp"
@@ -122,37 +132,20 @@
                         android:textColor="@color/text_primary"
                         android:textColorHint="@color/text_hint"/>
 
-                    <!-- Confirm Password Input -->
-                    <EditText
-                        android:id="@+id/signup_confirm"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@drawable/edit_text_background"
-                        android:drawableStart="@drawable/outline_lock_24"
-                        android:drawableLeft="@drawable/outline_lock_24"
-                        android:drawablePadding="12dp"
-                        android:hint="Confirm Password"
-                        android:inputType="textPassword"
-                        android:padding="16dp"
-                        android:textSize="16sp"
-                        android:textColor="@color/text_primary"
-                        android:textColorHint="@color/text_hint"/>
-
-                    <!-- Signup Button -->
+                    <!-- Login Button -->
                     <Button
-                        android:id="@+id/btn_signup"
+                        android:id="@+id/login_button"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_marginTop="24dp"
-                        android:background="@drawable/button_orange_gradient"
-                        android:text="SIGN UP"
+                        android:background="@drawable/button_gradient"
+                        android:text="LOGIN"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:elevation="8dp"/>
 
-                    <!-- Login Redirect -->
+                    <!-- Signup Redirect -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -163,16 +156,16 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Already have an account? "
+                            android:text="Don't have an account? "
                             android:textColor="@color/text_secondary"
                             android:textSize="14sp"/>
 
                         <TextView
-                            android:id="@+id/loginRedirectText"
+                            android:id="@+id/signupRedirectText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Login"
-                            android:textColor="@color/gradient_orange_start"
+                            android:text="Sign Up"
+                            android:textColor="@color/gradient_start"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:clickable="true"
@@ -190,3 +183,4 @@
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
+

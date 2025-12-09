@@ -1,140 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    android:padding="24dp">
+    android:background="@drawable/gradient_background"
+    android:fillViewport="true">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="24dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="35dp"
-            android:fontFamily="sans-serif-black"
-            android:text="Add New Expense"
-            android:textColor="#FFFFFF"
-            android:textSize="36sp"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Description"
-            android:textColor="#E0E0E0"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.02"
-            android:layout_marginBottom="8dp"
-            tools:ignore="HardcodedText" />
-
-        <EditText
-            android:id="@+id/edtDescription"
+        <!-- Header Section -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/btec_border"
-            android:hint="Mua sách lập trình Android"
-            android:paddingStart="18dp"
-            android:paddingEnd="18dp"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textColorHint="#99FFFFFF"
-            android:inputType="textCapSentences"
-            tools:ignore="HardcodedText" />
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Amount"
-            android:textColor="#E0E0E0"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.02"
+            android:orientation="vertical"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="8dp"
-            tools:ignore="HardcodedText" />
+            android:layout_marginBottom="30dp">
 
-        <EditText
-            android:id="@+id/edtAmount"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💸"
+                android:textSize="50sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add New Expense"
+                android:textColor="@color/white"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Track your spending"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:alpha="0.9"/>
+        </LinearLayout>
+
+        <!-- Form Card -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/btec_border"
-            android:hint="150000"
-            android:inputType="numberDecimal"
-            android:paddingStart="18dp"
-            android:paddingEnd="18dp"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:textColorHint="#99FFFFFF"
-            tools:ignore="HardcodedText" />
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Category"
-            android:textColor="#E0E0E0"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.02"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="8dp"
-            tools:ignore="HardcodedText" />
+            app:cardCornerRadius="25dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="@color/white">
 
-        <Spinner
-            android:id="@+id/spinnerCategory"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <!-- Description -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Description"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText
+                    android:id="@+id/edtDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/edit_text_background"
+                    android:hint="Enter expense description"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"
+                    android:textSize="16sp"
+                    android:inputType="textCapSentences"/>
+
+                <!-- Amount -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Amount (VND)"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText
+                    android:id="@+id/edtAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/edit_text_background"
+                    android:hint="150,000"
+                    android:inputType="numberDecimal"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"/>
+
+                <!-- Category -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Category"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <Spinner
+                    android:id="@+id/spinnerCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/edit_text_background"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:spinnerMode="dropdown"/>
+
+                <!-- Date -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText
+                    android:id="@+id/edtDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/edit_text_background"
+                    android:hint="Select date: YYYY-MM-DD"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:drawableEnd="@android:drawable/ic_menu_my_calendar"
+                    android:drawableRight="@android:drawable/ic_menu_my_calendar"/>
+
+                <!-- Save Button -->
+                <Button
+                    android:id="@+id/btnSaveExpense"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/button_gradient"
+                    android:text="SAVE EXPENSE"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:elevation="4dp"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Bottom Spacing -->
+        <View
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/btec_border"
-            android:paddingStart="18dp"
-            android:paddingEnd="12dp"
-            android:spinnerMode="dropdown"
-            android:gravity="center_vertical" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date"
-            android:textColor="#E0E0E0"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.02"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="8dp"
-            tools:ignore="HardcodedText" />
-
-        <EditText
-            android:id="@+id/edtDate"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/btec_border"
-            android:hint="Chọn ngày: YYYY-MM-DD"
-            android:paddingStart="18dp"
-            android:paddingEnd="18dp"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:textColorHint="#99FFFFFF"
-            android:focusable="false"
-            android:clickable="true"
-            tools:ignore="HardcodedText" />
-
-        <Button
-            android:id="@+id/btnSaveExpense"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_marginTop="40dp"
-            android:backgroundTint="#00E676"
-            android:text="Save Expense"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.02"
-            android:textColor="@color/black"
-            android:fontFamily="sans-serif-medium"
-            tools:ignore="HardcodedText" />
+            android:layout_height="30dp"/>
 
     </LinearLayout>
 
