@@ -18,6 +18,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     EditText edtDescription, edtAmount, edtDate;
     Spinner spinnerCategory;
     Button btnSave;
+    Button btnCancel;
 
     DatabaseHelper db;
 
@@ -36,6 +37,8 @@ public class AddExpenseActivity extends AppCompatActivity {
         edtDate = findViewById(R.id.edtDate);
         spinnerCategory = findViewById(R.id.spinnerCategory);
         btnSave = findViewById(R.id.btnSaveExpense);
+        btnCancel = findViewById(R.id.btnCancel);
+
 
         db = new DatabaseHelper(this);
 
@@ -84,6 +87,7 @@ public class AddExpenseActivity extends AppCompatActivity {
 
         // --------------------- SAVE/UPDATE BUTTON -------------------------
         btnSave.setOnClickListener(v -> handleSaveExpense());
+        btnCancel.setOnClickListener(v -> finish());
     }
 
     // Phương thức xử lý sự kiện lưu (SAVE) hoặc cập nhật (UPDATE)

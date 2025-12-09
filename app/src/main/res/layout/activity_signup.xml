@@ -17,6 +17,45 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginTop="380dp"
+            android:padding="20dp">
+
+            <EditText
+                android:id="@+id/signup_email"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/baseline_email_24"
+                android:drawablePadding="8dp"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:padding="8dp" />
+
+            <EditText
+                android:id="@+id/signup_password"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/outline_lock_24"
+                android:drawablePadding="8dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="8dp" />
+
+            <EditText
+                android:id="@+id/signup_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/outline_lock_24"
+                android:drawablePadding="8dp"
+                android:hint="Confirm Password"
+                android:inputType="textPassword"
+                android:padding="8dp" />
+            <Button
             android:gravity="center"
             android:padding="24dp">
 
