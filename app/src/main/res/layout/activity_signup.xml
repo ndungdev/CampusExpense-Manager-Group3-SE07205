@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_orange_background"
     android:orientation="vertical"
-    android:background="@drawable/signup_bg"
     tools:context=".SignupActivity">
-    <LinearLayout
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,24 +56,176 @@
                 android:inputType="textPassword"
                 android:padding="8dp" />
             <Button
+            android:gravity="center"
+            android:padding="24dp">
+
+            <!-- App Logo or Title Section -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:id="@+id/btn_signup"
-                android:textSize="18sp"
-                android:text="SIGN UP"
-                android:layout_marginTop="30dp"
-                app:cornerRadius="30dp"/>
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/loginRedirectText"
-                android:text="Already have an Account? Login"
-                android:layout_gravity="center"
-                android:padding="8dp"
-                android:textSize="18sp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/btec"
-                tools:ignore="HardcodedText" />
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="30dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📝"
+                    android:textSize="70sp"
+                    android:layout_marginBottom="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Create Account"
+                    android:textColor="@color/white"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start managing your expenses today"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_marginTop="8dp"
+                    android:alpha="0.9"/>
+
+            </LinearLayout>
+
+            <!-- Signup Form Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="12dp"
+                app:cardBackgroundColor="@color/white"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="32dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sign Up"
+                        android:textColor="@color/text_primary"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Create your account"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="24dp"/>
+
+                    <!-- Email Input -->
+                    <EditText
+                        android:id="@+id/signup_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/edit_text_background"
+                        android:drawableStart="@drawable/baseline_email_24"
+                        android:drawableLeft="@drawable/baseline_email_24"
+                        android:drawablePadding="12dp"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"
+                        android:padding="16dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"/>
+
+                    <!-- Password Input -->
+                    <EditText
+                        android:id="@+id/signup_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/edit_text_background"
+                        android:drawableStart="@drawable/outline_lock_24"
+                        android:drawableLeft="@drawable/outline_lock_24"
+                        android:drawablePadding="12dp"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:padding="16dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"/>
+
+                    <!-- Confirm Password Input -->
+                    <EditText
+                        android:id="@+id/signup_confirm"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/edit_text_background"
+                        android:drawableStart="@drawable/outline_lock_24"
+                        android:drawableLeft="@drawable/outline_lock_24"
+                        android:drawablePadding="12dp"
+                        android:hint="Confirm Password"
+                        android:inputType="textPassword"
+                        android:padding="16dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"/>
+
+                    <!-- Signup Button -->
+                    <Button
+                        android:id="@+id/btn_signup"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="24dp"
+                        android:background="@drawable/button_orange_gradient"
+                        android:text="SIGN UP"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:elevation="8dp"/>
+
+                    <!-- Login Redirect -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginTop="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Already have an account? "
+                            android:textColor="@color/text_secondary"
+                            android:textSize="14sp"/>
+
+                        <TextView
+                            android:id="@+id/loginRedirectText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Login"
+                            android:textColor="@color/gradient_orange_start"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:clickable="true"
+                            android:focusable="true"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Bottom Spacing -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
+
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

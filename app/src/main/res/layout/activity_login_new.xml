@@ -36,37 +36,6 @@
                     android:textSize="80sp"
                     android:layout_marginBottom="16dp"/>
 
-                <EditText
-                    android:id="@+id/login_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="30dp"
-                    android:background="@color/white"
-                    android:drawableLeft="@drawable/baseline_email_24"
-                    android:drawablePadding="8dp"
-                    android:hint="Email"
-                    android:padding="8dp" />
-
-                <EditText
-                    android:id="@+id/login_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@color/white"
-                    android:drawableLeft="@drawable/outline_lock_24"
-                    android:drawablePadding="8dp"
-                    android:hint="Password"
-                    android:inputType="textPassword"
-                    android:padding="8dp" />
-
-                <Button
-                    android:id="@+id/login_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_marginTop="30dp"
-                    android:text="Login"
-                    android:textSize="18sp"
-                    app:cornerRadius="30dp" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -214,3 +183,4 @@
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
+
