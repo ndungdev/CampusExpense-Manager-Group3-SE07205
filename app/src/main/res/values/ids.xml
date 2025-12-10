@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="edtDescription" type="id" />
+    <item name="edtAmount" type="id" />
+    <item name="edtDate" type="id" />
+    <item name="tvFixedBudget" type="id" />
+    <item name="tvRemainingBudget" type="id" />
+    <item name="progressBarBudget" type="id" />
+    <item name="layoutEmptyState" type="id" />
+    <item name="tvItemDescription" type="id" />
+    <item name="tvItemAmount" type="id" />
+    <item name="tvItemSubInfo" type="id" />
+    <item name="tvIconCategory" type="id" />
+    <item name="lvDetailedExpenses" type="id" />
+    <item name="spinnerCategoryFilter" type="id" />
+    <item name="tvReportTitle" type="id" />
+</resources>

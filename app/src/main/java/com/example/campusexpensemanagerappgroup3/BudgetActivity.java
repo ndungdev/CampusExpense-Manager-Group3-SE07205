@@ -1,90 +1,129 @@
 package com.example.campusexpensemanagerappgroup3;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ProgressBar;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
 import java.text.NumberFormat;
 import java.util.Locale;
 
 public class BudgetActivity extends AppCompatActivity {
 
-    // KHAI BÁO NGÂN SÁCH CỐ ĐỊNH (PHẢI KHỚP VỚI YÊU CẦU CỦA BẠN)
-    private static final double MONTHLY_BUDGET = 5000000.0; // Ví dụ: 5,000,000 VND
-
+    // Khai báo các biến giao diện
+    private EditText etBudgetAmount;
+    private Button btnSaveBudget;
+    private Button btnBack; // Nút Back ở dưới
     private TextView tvTotalSpent;
-    private TextView tvRemainingBudget;
-    private TextView tvFixedBudget; // Để hiển thị ngân sách cố định
-    private ProgressBar progressBarBudget;
+    private TextView tvBudgetStatus;
+
     private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_budget);
+        setContentView(R.layout.activity_budget); // Kết nối với XML
 
-        // 1. Ánh xạ View
-        tvFixedBudget = findViewById(R.id.tvFixedBudget);
-        tvTotalSpent = findViewById(R.id.tvTotalSpent);
-        tvRemainingBudget = findViewById(R.id.tvRemainingBudget);
-        progressBarBudget = findViewById(R.id.progressBarBudget);
+        // 1. Cài đặt nút Back trên thanh tiêu đề (Tùy chọn)
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            setTitle("Quản lý Ngân sách");
+        }
 
         // 2. Khởi tạo Database
         db = new DatabaseHelper(this);
 
-        // 3. Hiển thị ngân sách cố định ngay lập tức
-        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-        tvFixedBudget.setText(String.format("Budget: %s", formatter.format(MONTHLY_BUDGET)));
+        // 3. Ánh xạ View (Khớp với file activity_budget.xml)
+        etBudgetAmount = findViewById(R.id.etBudgetAmount);
+        btnSaveBudget = findViewById(R.id.btnSaveBudget);
+        tvTotalSpent = findViewById(R.id.tvTotalSpent);
+        tvBudgetStatus = findViewById(R.id.tvBudgetStatus);
+        btnBack = findViewById(R.id.btnBack); // Ánh xạ nút Back
 
-        // 4. Tải và cập nhật tóm tắt ngân sách
-        updateBudgetSummary();
+        // 4. Tải dữ liệu ban đầu lên giao diện
+        loadBudgetData();
+
+        // 5. Xử lý sự kiện nút LƯU
+        btnSaveBudget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveBudget();
+            }
+        });
+
+        // 6. Xử lý sự kiện nút BACK (Ở dưới cùng màn hình)
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Đóng Activity, quay về trang chủ
+            }
+        });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Cập nhật lại summary khi người dùng quay lại màn hình
-        updateBudgetSummary();
-    }
+    // Hàm tải và hiển thị dữ liệu từ Database
+    private void loadBudgetData() {
+        // A. Lấy Ngân sách đã lưu từ DB
+        double currentBudget = db.getMonthlyBudget();
 
-    /**
-     * Lấy dữ liệu chi tiêu, tính toán ngân sách và cập nhật UI.
-     */
-    private void updateBudgetSummary() {
-        // 1. Lấy Total Spent từ Database cho tháng hiện tại
+        // Nếu đã có ngân sách, hiển thị lên ô nhập liệu
+        if (currentBudget > 0) {
+            etBudgetAmount.setText(String.format(Locale.US, "%.0f", currentBudget));
+        }
+
+        // B. Lấy Tổng tiền đã tiêu trong tháng này từ DB
         double totalSpent = db.calculateTotalSpentForMonth();
 
-        // 2. Tính toán Remaining Budget
-        double remainingBudget = MONTHLY_BUDGET - totalSpent;
-
-        // 3. Tính tỷ lệ Progress
-        double spendingRatio = totalSpent / MONTHLY_BUDGET;
-        int progressPercent = (int) (spendingRatio * 100);
-
-        // Đảm bảo progress không vượt quá 100%
-        if (progressPercent > 100) {
-            progressPercent = 100;
-        }
-
-        // 4. Định dạng tiền tệ
+        // C. Hiển thị và tính toán
         NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        tvTotalSpent.setText("Đã chi tiêu tháng này: " + formatter.format(totalSpent));
 
-        // 5. Cập nhật UI
+        if (currentBudget > 0) {
+            double remaining = currentBudget - totalSpent;
+            tvBudgetStatus.setText("Còn lại: " + formatter.format(remaining));
 
-        // Cập nhật Total Spent
-        tvTotalSpent.setText(formatter.format(totalSpent));
-
-        // Cập nhật Remaining Budget
-        tvRemainingBudget.setText(formatter.format(remainingBudget));
-
-        // Tùy chọn: Thay đổi màu Remaining Budget nếu chi tiêu vượt quá ngân sách
-        if (remainingBudget < 0) {
-            tvRemainingBudget.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+            // Đổi màu chữ: Đỏ nếu tiêu quá lố, Xanh nếu còn tiền
+            if (remaining < 0) {
+                tvBudgetStatus.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                tvBudgetStatus.setText("Vượt ngân sách: " + formatter.format(Math.abs(remaining)));
+            } else {
+                tvBudgetStatus.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+            }
         } else {
-            tvRemainingBudget.setTextColor(getResources().getColor(android.R.color.holo_green_light));
+            tvBudgetStatus.setText("Chưa thiết lập ngân sách");
+        }
+    }
+
+    // Hàm lưu ngân sách vào Database
+    private void saveBudget() {
+        String amountStr = etBudgetAmount.getText().toString().trim();
+        if (amountStr.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập số tiền ngân sách", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        // Cập nhật Progress Bar
-        progressBarBudget.setProgress(progressPercent);
+        double amount = Double.parseDouble(amountStr);
+
+        // Gọi hàm lưu trong DatabaseHelper
+        boolean isSaved = db.setMonthlyBudget(amount);
+
+        if (isSaved) {
+            Toast.makeText(this, "Đã lưu ngân sách!", Toast.LENGTH_SHORT).show();
+            loadBudgetData(); // Tải lại giao diện để cập nhật số dư mới
+        } else {
+            Toast.makeText(this, "Lỗi khi lưu ngân sách.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Xử lý sự kiện nút Back trên thanh tiêu đề (Mũi tên nhỏ)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -18,39 +18,42 @@
             android:orientation="vertical"
             android:layout_marginTop="380dp"
             android:padding="20dp">
+
             <EditText
+                android:id="@+id/signup_email"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:id="@+id/signup_email"
-                android:background="@drawable/btec_border"
                 android:layout_marginTop="30dp"
-                android:padding="8dp"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/baseline_email_24"
+                android:drawablePadding="8dp"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
-                android:drawableLeft="@drawable/baseline_email_24"
-                android:drawablePadding="8dp"/>
+                android:padding="8dp" />
+
             <EditText
+                android:id="@+id/signup_password"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:id="@+id/signup_password"
-                android:background="@drawable/btec_border"
                 android:layout_marginTop="30dp"
-                android:padding="8dp"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/outline_lock_24"
+                android:drawablePadding="8dp"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:drawableLeft="@drawable/outline_lock_24"
-                android:drawablePadding="8dp"/>
+                android:padding="8dp" />
+
             <EditText
+                android:id="@+id/signup_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:id="@+id/signup_confirm"
-                android:background="@drawable/btec_border"
                 android:layout_marginTop="30dp"
-                android:padding="8dp"
+                android:background="@color/white"
+                android:drawableLeft="@drawable/outline_lock_24"
+                android:drawablePadding="8dp"
                 android:hint="Confirm Password"
                 android:inputType="textPassword"
-                android:drawableLeft="@drawable/outline_lock_24"
-                android:drawablePadding="8dp"/>
+                android:padding="8dp" />
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="70dp"

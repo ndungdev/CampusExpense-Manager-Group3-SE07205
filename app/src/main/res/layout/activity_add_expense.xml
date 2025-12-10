@@ -1,71 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F3000000"
+    android:padding="20dp">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-
-        android:layout_height="wrap_content"
-
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/btec_border"
-            android:hint="Mua sách lập trình Android"
-            android:paddingStart="18dp"
-            android:paddingEnd="18dp"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:textColorHint="#99FFFFFF"
-            android:inputType="textCapSentences"
-            tools:ignore="HardcodedText" />
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:paddingStart="18dp"
-            android:paddingEnd="18dp"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:textColorHint="#99FFFFFF"
-            tools:ignore="HardcodedText" />
+            android:layout_marginBottom="24dp"
+            android:text="Add New Expense"
+            android:textColor="#FFFFFF"
+            android:textSize="32sp"
+            android:textStyle="bold" />
 
-    <Spinner
-        android:id="@+id/spinnerCategory"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp"
+            android:text="Description"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
-    <TextView
-        android:layout_height="wrap_content"
-
+        <EditText
+            android:id="@+id/edtDescription"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="55dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/btec_border"
-            android:hint="Chọn ngày: YYYY-MM-DD"
-            android:paddingStart="18dp"
-            android:paddingEnd="18dp"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:textColorHint="#99FFFFFF"
-            android:focusable="false"
+            android:hint="Mua sách lập trình Android"
+            android:paddingHorizontal="20dp"
+            android:singleLine="true"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#888888" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp"
+            android:text="Amount"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edtAmount"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/btec_border"
+            android:hint="150000"
+            android:inputType="numberDecimal"
+            android:paddingHorizontal="20dp"
+            android:singleLine="true"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#888888" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp"
+            android:text="Category"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/btec_border">
+
+            <Spinner
+                android:id="@+id/spinnerCategory"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="10dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp"
+            android:text="Date"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edtDate"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/btec_border"
             android:clickable="true"
-            tools:ignore="HardcodedText" />
+            android:focusable="false"
+            android:hint="Chọn ngày: YYYY-MM-DD"
+            android:paddingHorizontal="20dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#888888" />
 
         <Button
             android:id="@+id/btnSaveExpense"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_marginTop="40dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="16dp"
             android:backgroundTint="#00E676"
             android:text="Save Expense"
-            android:textSize="20sp"
+            android:textColor="#000000"
+            android:textSize="18sp"
             android:textStyle="bold"
-            android:letterSpacing="0.02"
-            android:textColor="@color/black"
-            android:fontFamily="sans-serif-medium"
-            tools:ignore="HardcodedText" />
+            app:cornerRadius="30dp" />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="#666666"
+            android:text="CANCEL"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:cornerRadius="30dp" />
 
     </LinearLayout>
 
-    <Button
+</ScrollView>
