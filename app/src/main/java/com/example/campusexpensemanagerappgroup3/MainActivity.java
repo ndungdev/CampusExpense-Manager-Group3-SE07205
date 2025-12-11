@@ -123,27 +123,53 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Lấy dữ liệu chi tiêu trong tháng, tính toán ngân sách và cập nhật UI.
+     * Chạy database operation trên background thread để tránh blocking UI.
      */
     private void updateBudgetSummary() {
-        // 1. Lấy Total Spent từ Database cho tháng hiện tại
-        double totalSpent = db.calculateTotalSpentForMonth();
-        // (Phần còn lại của hàm giữ nguyên)
-        double remainingBudget = MONTHLY_BUDGET - totalSpent;
-        double spendingRatio = totalSpent / MONTHLY_BUDGET;
-        int progressPercent = (int) (spendingRatio * 100);
-        if (progressPercent > 100) {
-            progressPercent = 100;
+        // Chạy database operation trên background thread
+        new Thread(() -> {
+            try {
+                // 1. Lấy Total Spent từ Database cho tháng hiện tại
+                final double totalSpent = db.calculateTotalSpentForMonth();
+                final double remainingBudget = MONTHLY_BUDGET - totalSpent;
+                final double spendingRatio = totalSpent / MONTHLY_BUDGET;
+                int progressPercent = (int) (spendingRatio * 100);
+                if (progressPercent > 100) {
+                    progressPercent = 100;
+                }
+
+                final int finalProgressPercent = progressPercent;
+                final NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+
+                // Cập nhật UI trên main thread
+                runOnUiThread(() -> {
+                    totalSpentText.setText(formatter.format(totalSpent));
+                    budgetRemainingText.setText(formatter.format(remainingBudget));
+
+                    if (remainingBudget < 0) {
+                        budgetRemainingText.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+                        budgetProgressBar.setProgressTintList(getResources().getColorStateList(android.R.color.holo_red_light));
+                    } else {
+                        budgetRemainingText.setTextColor(getResources().getColor(android.R.color.holo_green_light));
+                        budgetProgressBar.setProgressTintList(getResources().getColorStateList(android.R.color.holo_green_light));
+                    }
+                    budgetProgressBar.setProgress(finalProgressPercent);
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() ->
+                    Toast.makeText(MainActivity.this, "Error loading budget summary", Toast.LENGTH_SHORT).show()
+                );
+            }
+        }).start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Đóng database khi activity bị destroy để tránh memory leak
+        if (db != null) {
+            db.closeDatabase();
         }
-        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-        totalSpentText.setText(formatter.format(totalSpent));
-        budgetRemainingText.setText(formatter.format(remainingBudget));
-        if (remainingBudget < 0) {
-            budgetRemainingText.setTextColor(getResources().getColor(android.R.color.holo_red_light));
-            budgetProgressBar.setProgressTintList(getResources().getColorStateList(android.R.color.holo_red_light));
-        } else {
-            budgetRemainingText.setTextColor(getResources().getColor(android.R.color.holo_green_light));
-            budgetProgressBar.setProgressTintList(getResources().getColorStateList(android.R.color.holo_green_light));
-        }
-        budgetProgressBar.setProgress(progressPercent);
     }
 }

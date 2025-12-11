@@ -49,14 +49,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_AMOUNT + " REAL, " +
                 COL_CATEGORY + " TEXT, " +
                 COL_DATE + " TEXT)");
+
+        // Tạo index cho cột DATE để tăng tốc độ truy vấn theo ngày
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_date ON " + TABLE_EXPENSES + "(" + COL_DATE + ")");
+
+        // Tạo index cho cột CATEGORY để tăng tốc độ truy vấn theo danh mục
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_category ON " + TABLE_EXPENSES + "(" + COL_CATEGORY + ")");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Xóa các index cũ
+        db.execSQL("DROP INDEX IF EXISTS idx_date");
+        db.execSQL("DROP INDEX IF EXISTS idx_category");
 
+        // Xóa các bảng cũ
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPENSES);
 
+        // Tạo lại bảng và index
         onCreate(db);
     }
 
@@ -92,16 +103,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Thêm chi tiêu (CREATE)
     public long insertExpense(String description, double amount, String category, String date) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
+        long result = -1;
 
-        cv.put(COL_DESCRIPTION, description);
-        cv.put(COL_AMOUNT, amount);
-        cv.put(COL_CATEGORY, category);
-        cv.put(COL_DATE, date);
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues cv = new ContentValues();
 
-        long result = db.insert(TABLE_EXPENSES, null, cv);
-        db.close();
+            cv.put(COL_DESCRIPTION, description);
+            cv.put(COL_AMOUNT, amount);
+            cv.put(COL_CATEGORY, category);
+            cv.put(COL_DATE, date);
+
+            result = db.insert(TABLE_EXPENSES, null, cv);
+            // Không đóng db - SQLiteOpenHelper tự quản lý
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return result;
     }
 
@@ -111,58 +129,89 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Sắp xếp theo ngày giảm dần
         String selectQuery = "SELECT * FROM " + TABLE_EXPENSES + " ORDER BY " + COL_DATE + " DESC, " + COL_ID + " DESC";
 
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
 
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(0);
-                String description = cursor.getString(1);
-                double amount = cursor.getDouble(2);
-                String category = cursor.getString(3);
-                String date = cursor.getString(4);
+        try {
+            db = this.getReadableDatabase(); // Dùng getReadableDatabase cho SELECT
+            cursor = db.rawQuery(selectQuery, null);
 
-                // Khởi tạo đối tượng Expense (yêu cầu ViewExpensesActivity.Expense có hàm getId())
-                ViewExpensesActivity.Expense expense = new ViewExpensesActivity.Expense(
-                        id, description, amount, category, date);
-                expenseList.add(expense);
-            } while (cursor.moveToNext());
+            if (cursor != null && cursor.moveToFirst()) {
+                int idIndex = cursor.getColumnIndexOrThrow(COL_ID);
+                int descIndex = cursor.getColumnIndexOrThrow(COL_DESCRIPTION);
+                int amountIndex = cursor.getColumnIndexOrThrow(COL_AMOUNT);
+                int categoryIndex = cursor.getColumnIndexOrThrow(COL_CATEGORY);
+                int dateIndex = cursor.getColumnIndexOrThrow(COL_DATE);
+
+                do {
+                    int id = cursor.getInt(idIndex);
+                    String description = cursor.getString(descIndex);
+                    double amount = cursor.getDouble(amountIndex);
+                    String category = cursor.getString(categoryIndex);
+                    String date = cursor.getString(dateIndex);
+
+                    // Khởi tạo đối tượng Expense
+                    ViewExpensesActivity.Expense expense = new ViewExpensesActivity.Expense(
+                            id, description, amount, category, date);
+                    expenseList.add(expense);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Đảm bảo đóng cursor
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            // Không đóng db ở đây vì SQLiteOpenHelper quản lý connection pool
         }
 
-        cursor.close();
-        db.close();
         return expenseList;
     }
 
     // Chỉnh sửa chi tiêu (UPDATE)
     public int updateExpense(int id, String description, double amount, String category, String date) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
+        int result = 0;
 
-        values.put(COL_DESCRIPTION, description);
-        values.put(COL_AMOUNT, amount);
-        values.put(COL_CATEGORY, category);
-        values.put(COL_DATE, date);
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
 
-        int result = db.update(
-                TABLE_EXPENSES,
-                values,
-                COL_ID + " = ?",
-                new String[]{String.valueOf(id)}
-        );
-        db.close();
+            values.put(COL_DESCRIPTION, description);
+            values.put(COL_AMOUNT, amount);
+            values.put(COL_CATEGORY, category);
+            values.put(COL_DATE, date);
+
+            result = db.update(
+                    TABLE_EXPENSES,
+                    values,
+                    COL_ID + " = ?",
+                    new String[]{String.valueOf(id)}
+            );
+            // Không đóng db - SQLiteOpenHelper tự quản lý
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return result;
     }
 
     // Xóa chi tiêu (DELETE)
     public int deleteExpense(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int result = db.delete(
-                TABLE_EXPENSES,
-                COL_ID + " = ?",
-                new String[]{String.valueOf(id)}
-        );
-        db.close();
+        int result = 0;
+
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            result = db.delete(
+                    TABLE_EXPENSES,
+                    COL_ID + " = ?",
+                    new String[]{String.valueOf(id)}
+            );
+            // Không đóng db - SQLiteOpenHelper tự quản lý
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return result;
     }
 
@@ -173,17 +222,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @return Tổng chi tiêu (dưới dạng double).
      */
     public double getTotalExpenses() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        // Sử dụng hàm SUM() trong SQLite
-        Cursor cursor = db.rawQuery("SELECT SUM(" + COL_AMOUNT + ") FROM " + TABLE_EXPENSES, null);
-
         double total = 0.0;
-        if (cursor.moveToFirst()) {
-            total = cursor.getDouble(0);
+        Cursor cursor = null;
+
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            // Sử dụng hàm SUM() trong SQLite
+            cursor = db.rawQuery("SELECT SUM(" + COL_AMOUNT + ") FROM " + TABLE_EXPENSES, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                total = cursor.getDouble(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
         }
 
-        cursor.close();
-        db.close();
         return total;
     }
 
@@ -225,34 +282,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @return Tổng chi tiêu (dưới dạng double).
      */
     public double calculateTotalSpentForMonth() {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        // 1. Lấy ngày đầu tiên và ngày cuối cùng của tháng hiện tại
-        Calendar calendar = Calendar.getInstance();
-
-        // Đặt về ngày đầu tiên của tháng (YYYY-MM-01)
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        String startDate = dateFormat.format(calendar.getTime());
-
-        // Đặt về ngày cuối cùng của tháng
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        String endDate = dateFormat.format(calendar.getTime());
-
-        // 2. Viết truy vấn SQL
-        // Sử dụng hàm SUM() và điều kiện WHERE để lọc theo ngày
-        String query = "SELECT SUM(" + COL_AMOUNT + ") FROM " + TABLE_EXPENSES +
-                " WHERE " + COL_DATE + " BETWEEN ? AND ?";
-
-        Cursor cursor = db.rawQuery(query, new String[]{startDate, endDate});
-
         double totalSpent = 0.0;
-        if (cursor.moveToFirst()) {
-            totalSpent = cursor.getDouble(0);
+        Cursor cursor = null;
+
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+
+            // 1. Lấy ngày đầu tiên và ngày cuối cùng của tháng hiện tại
+            Calendar calendar = Calendar.getInstance();
+
+            // Đặt về ngày đầu tiên của tháng (YYYY-MM-01)
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            String startDate = dateFormat.format(calendar.getTime());
+
+            // Đặt về ngày cuối cùng của tháng
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+            String endDate = dateFormat.format(calendar.getTime());
+
+            // 2. Viết truy vấn SQL
+            // Sử dụng hàm SUM() và điều kiện WHERE để lọc theo ngày
+            String query = "SELECT SUM(" + COL_AMOUNT + ") FROM " + TABLE_EXPENSES +
+                    " WHERE " + COL_DATE + " BETWEEN ? AND ?";
+
+            cursor = db.rawQuery(query, new String[]{startDate, endDate});
+
+            if (cursor != null && cursor.moveToFirst()) {
+                totalSpent = cursor.getDouble(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
         }
 
-        cursor.close();
-        db.close();
         return totalSpent;
+    }
+
+    /**
+     * Đóng database một cách an toàn.
+     * Nên gọi phương thức này khi Activity/Fragment bị destroy để tránh memory leak.
+     */
+    public synchronized void closeDatabase() {
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
